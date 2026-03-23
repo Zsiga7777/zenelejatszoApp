@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicApp.Popups.ThemePickerPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                                           xmlns:viewModels="clr-namespace:MusicApp.ViewModels"
+xmlns:models="clr-namespace:MusicApp.Core.Models;assembly=MusicApp.Core"
+                x:DataType="viewModels:ThemePickerPopupViewModel"
+               BackgroundColor="{AppThemeBinding Dark={StaticResource OffBlack},Light=white}"
+               Padding="5"
+               x:Name="this">
+
+    <CollectionView
+           ItemsLayout="VerticalList"
+           ItemsSource="{Binding Elements}"
+           SelectionMode="Single"
+           SelectedItem="{Binding SelectedAppTheme}"
+           SelectionChangedCommand="{Binding OnSelectionChangeCommand}"
+        MaximumWidthRequest="200"
+>
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="x:String">
+                <VerticalStackLayout>
+                    <Label x:Name="ClassName" Text="{Binding .}" FontSize="20" Padding="10" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</toolkit:Popup>

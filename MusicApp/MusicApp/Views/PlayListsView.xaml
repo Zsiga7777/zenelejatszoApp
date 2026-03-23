@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicApp.Views.PlayListsView"
+                          xmlns:viewModels="clr-namespace:MusicApp.ViewModels"
+xmlns:models="clr-namespace:MusicApp.Core.Models;assembly=MusicApp.Core"
+xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+x:DataType="viewModels:PlaylistViewModel"
+             xmlns:components="clr-namespace:MusicApp.Components"
+              xmlns:converters="clr-namespace:MusicApp.Converter"
+             x:Name="this"
+             Title=""
+             Shell.NavBarIsVisible="{OnPlatform Android=True, WinUI=false}">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"/>
+    </ContentPage.Behaviors>
+    
+    <ContentPage.Resources>
+        <toolkit:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
+       
+    </ContentPage.Resources>
+    <VerticalStackLayout Margin="0, 10, 0, 0">
+        <Button Text="Playlist hozzáadása" WidthRequest="300" Style="{StaticResource ButtonStyle}"
+HorizontalOptions="Center" Command="{Binding AddPlaylistCommand}" Margin="0, 0, 0, 10"/>
+        <ScrollView >
+            <ListView ItemsSource="{Binding Playlists}"  MaximumWidthRequest="320">
+                <ListView.Behaviors>
+                    <toolkit:EventToCommandBehavior Command="{Binding OnPlaylistTappedCommand}" EventName="ItemTapped"
+    BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
+    EventArgsConverter="{toolkit:ItemTappedEventArgsConverter}"/>
+
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PlaylistModel">
+                        <ViewCell >
+                        <components:PlaylistListItemComponent Playlist="{Binding .}"
+                                          UpdatePlaylistCommad="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PlaylistViewModel}}, Path=UpdatePlaylistCommad}"
+                                                       DeletePlaylistCommad="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PlaylistViewModel}}, Path=DeletePlaylistCommad}"
+                                          CommandParameter="{Binding Id}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentPage>

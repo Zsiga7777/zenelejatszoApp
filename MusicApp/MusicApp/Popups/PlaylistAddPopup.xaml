@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+          xmlns:viewModels="clr-namespace:MusicApp.ViewModels"
+           xmlns:system="clr-namespace:System;assembly=System.Runtime"
+               xmlns:models="clr-namespace:MusicApp.Core.Models;assembly=MusicApp.Core"
+           x:Class="MusicApp.Popups.PlaylistAddPopup"
+           x:DataType="viewModels:PlaylistAddPopupViewModel"
+               BackgroundColor="{AppThemeBinding Dark={StaticResource OffBlack},Light=white}"
+Padding="8"
+               x:Name="this"
+          >
+
+    <toolkit:Popup.Behaviors>
+        <toolkit:EventToCommandBehavior 
+            EventName="Opened"
+            Command="{Binding AppearingCommand}" BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"/>
+    </toolkit:Popup.Behaviors>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+    <ScrollView MaximumWidthRequest="300" Grid.Row="0">
+        <VerticalStackLayout>
+        <Label Text="playlist cím:" HorizontalOptions="Center"/>
+        <Entry Text="{Binding PlaylistTitle}"></Entry>
+
+        <ListView ItemsSource="{Binding Musics}" Grid.Row="0"
+          VerticalScrollBarVisibility="Never"
+           MaximumWidthRequest="600">
+            <ListView.Behaviors>
+                <toolkit:EventToCommandBehavior Command="{Binding OnMusicTappedCommand}"
+                                             EventName="ItemTapped"
+     BindingContext="{Binding Source={x:Reference this}, Path=BindingContext}"
+     EventArgsConverter="{toolkit:ItemTappedEventArgsConverter}"/>
+
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+
+                <DataTemplate x:DataType="models:MusicModel">
+                    <ViewCell>
+                        <Label Text="{Binding Title}" Padding="0,10,0,10" BackgroundColor="{Binding Bgcolor}"/>
+                    </ViewCell>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+            
+        </VerticalStackLayout>
+    </ScrollView>
+        <Button Text="Save" Command="{Binding SavePlaylistCommand}" WidthRequest="60" Grid.Row="1" Style="{StaticResource ButtonStyle}"/>
+    </Grid>
+</toolkit:Popup>

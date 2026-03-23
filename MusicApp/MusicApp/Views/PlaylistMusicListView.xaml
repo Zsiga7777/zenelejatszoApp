@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicApp.Views.PlaylistMusicListView"
+             Title=""
+              xmlns:viewModels="clr-namespace:MusicApp.ViewModels"
+ xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:components="clr-namespace:MusicApp.Components"
+ x:DataType="viewModels:PlaylistMusicListViewModel"
+              Shell.NavBarIsVisible="{OnPlatform Android=True, WinUI=false}"
+             x:Name="this">
+
+    <Grid HorizontalOptions="Center" Margin="0, 10, 0, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Button Text="Back" Grid.Row="0" WidthRequest="60" HorizontalOptions="Start" Command="{Binding BackCommand}" Style="{StaticResource ButtonStyle}" HeightRequest="40"/>
+        <Label Text="{Binding PlaylistTitle}" Grid.Row="0" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold"/>
+        <components:MusicListPlusMediaElementComponent Musics="{Binding Musics}" Grid.Row="1"/>
+    </Grid>
+</ContentPage>

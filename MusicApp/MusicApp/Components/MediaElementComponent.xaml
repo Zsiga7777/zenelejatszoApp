@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:MusicApp.Converter"
+             x:Class="MusicApp.Components.MediaElementComponent"
+             Unloaded="UnloadedEvent"
+             Loaded="LoadedEvent"
+             x:Name="this">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:TimeSpanToSecondConverter x:Key="TimeSpanToSecondConverter"/>
+            <converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <VerticalStackLayout HeightRequest="170">
+        <toolkit:MediaElement x:Name="mediaElement"
+ShouldAutoPlay="True"
+ShouldShowPlaybackControls="False"
+Source="{Binding SelectedMusic.MediaSourcePath, Source={x:Reference this}}"
+                              IsVisible="False" 
+                              StateChanged="SetMusicDuration"
+>
+            <toolkit:MediaElement.Behaviors>
+                <toolkit:EventToCommandBehavior Command="{Binding OnMusicEndedCommand, Source={x:Reference this}}" EventName="MediaEnded"
+BindingContext="{Binding Source={x:Reference mediaElement}, Path=BindingContext}"/>
+                <toolkit:EventToCommandBehavior Command="{Binding OnMusicProgressingCommand, Source={x:Reference this}}" CommandParameter="{Binding Position ,Source={x:Reference mediaElement}}" EventName="PositionChanged"
+BindingContext="{Binding Source={x:Reference mediaElement}, Path=BindingContext}"/>
+            </toolkit:MediaElement.Behaviors>
+        </toolkit:MediaElement>
+        <Border Grid.Row="1" Style="{StaticResource BorderStyle}"
+                IsVisible="{Binding IsMediaPlayerVisible, Source={x:Reference this}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="95"/>
+                </Grid.RowDefinitions>
+                <Slider x:Name="audioProgressSlider"
+        Minimum="0"
+        ThumbColor="Blue"
+        MaximumTrackColor="#35a4db"
+        MinimumTrackColor="LightBlue"
+        InputTransparent="False"
+                Maximum="{Binding MusicDuration.TotalSeconds, Source={x:Reference this}}"
+        Value="{Binding CurrentPlayerStanding, Source={x:Reference this}, Converter={StaticResource TimeSpanToSecondConverter}, Mode=TwoWay }"
+        HorizontalOptions="Center" 
+               MinimumWidthRequest="300"
+                Grid.Row="0"
+                />
+
+                <StackLayout Grid.Row="1" MaximumWidthRequest="300" HorizontalOptions="Center">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="{Binding Position, Source={x:Reference mediaElement}, Converter={StaticResource TimeSpanToStringConverter}}"
+       HorizontalOptions="Start" Grid.Column="0" Grid.Row="1"
+       />
+                        <Label Text="{Binding MusicDuration, Source={x:Reference this}, Converter={StaticResource TimeSpanToStringConverter}}"
+               HorizontalOptions="End" Grid.Column="1" Grid.Row="1"
+               />
+                    </Grid>
+                </StackLayout>
+                <Label Text="{Binding SelectedMusic.Title, Source={x:Reference this} }" 
+       Grid.Row="2"
+       MaximumWidthRequest="600"
+       HorizontalOptions="Center"
+                       LineBreakMode="TailTruncation"
+       />
+                <HorizontalStackLayout HorizontalOptions="Center"
+                               Grid.Row="4"
+                               MaximumWidthRequest="600">
+                    <ImageButton
+                Source="{AppThemeBinding Dark=backwardsymbol_dark.png, Light=backwardsymbol_light.png}" BackgroundColor="Transparent"
+                Command="{Binding OnPreviousTrackTappedCommand, Source={x:Reference this}}"/>
+
+                    <ImageButton BackgroundColor="Transparent"
+                Source="{AppThemeBinding Dark=playsymbol_dark.png, Light=playsymbol_light.png }"
+                Command="{Binding OnPlayPausedTappedCommand, Source={x:Reference this}}" 
+                                 IsVisible="{Binding PlayButtonVisible ,Source={x:Reference this}}"/>
+
+                    <ImageButton BackgroundColor="Transparent"
+Source="{AppThemeBinding Dark=pausesymbol_dark.png, Light=pausesymbol_light.png }"
+Command="{Binding OnPlayPausedTappedCommand, Source={x:Reference this}}"
+                                 IsVisible="{Binding PauseButtonVisible ,Source={x:Reference this}}"/>
+
+                    <ImageButton BackgroundColor="Transparent"
+                Source="{AppThemeBinding Dark=forwardsymbol_dark.png, Light=forwardsymbol_light.png}"
+                 Command="{Binding OnNextTrackTappedCommand, Source={x:Reference this}}"/>
+
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentView>

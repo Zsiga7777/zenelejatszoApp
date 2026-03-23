@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicApp.Components.PlaylistListItemComponent"
+                      xmlns:components="clr-namespace:MusicApp.Components"
+xmlns:models="clr-namespace:MusicApp.Core.Models;assembly=MusicApp.Core"
+x:DataType="components:PlaylistListItemComponent"
+x:Name="this">
+    <StackLayout>
+        <Border MaximumWidthRequest="320" Style="{StaticResource BorderStyle}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding Playlist.Title, Source={x:Reference this}}" Grid.Column="0"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"/>
+                <ImageButton Source="{AppThemeBinding Dark=editsymbol_dark.png, Light=editsymbol_light.png}" BackgroundColor="Transparent"
+        CommandParameter="{Binding Playlist.Id ,Source={x:Reference this}}"
+Command="{Binding UpdatePlaylistCommad,Source={x:Reference this}}"
+HorizontalOptions="Center"
+VerticalOptions="Center"
+                             HeightRequest="50"
+Grid.Column="1"/>
+                <ImageButton Source="{AppThemeBinding Dark=deletesymbol_dark.png, Light=deletesymbol_light.png}" BackgroundColor="Transparent"
+        CommandParameter="{Binding Playlist.Id ,Source={x:Reference this}}"
+Command="{Binding DeletePlaylistCommad,Source={x:Reference this}}"
+HorizontalOptions="Center"
+VerticalOptions="Center"
+Grid.Column="2"/>
+            </Grid>
+        </Border>
+    </StackLayout>
+</ContentView>

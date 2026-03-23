@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MusicApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MusicApp.Views"
+    Title="MusicApp">
+
+    <FlyoutItem Title="Zene" FlyoutIcon="{AppThemeBinding Dark=musicsymbol_dark.png, Light=musicsymbol_light.png }" >
+
+            <ShellContent ContentTemplate="{DataTemplate local:MusicListView}"  />
+
+    </FlyoutItem>
+    <FlyoutItem Title="Beállítások" FlyoutIcon="{AppThemeBinding Dark=settingssymbol_dark.png, Light=settingssymbol_light.png }">
+
+        <ShellContent ContentTemplate="{DataTemplate local:SettingView}" />
+
+    </FlyoutItem>
+    <FlyoutItem Title="Playlistek" FlyoutIcon="{AppThemeBinding Dark=albumsymbol_dark.png, Light=albumsymbol_light.png }">
+
+        <ShellContent ContentTemplate="{DataTemplate local:PlayListsView}" />
+
+    </FlyoutItem>
+</Shell>
