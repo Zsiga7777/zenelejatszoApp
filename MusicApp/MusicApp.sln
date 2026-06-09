@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11822.322 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicApp", "MusicApp\MusicApp.csproj", "{063E5145-5B86-4110-8FFB-A36FFB12AFBB}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicApp.Services", "MusicApp.Services\MusicApp.Services.csproj", "{7B3508A7-9B05-4916-AB19-D0938AE07978}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicApp.Database", "MusicApp.Database\MusicApp.Database.csproj", "{737A4BAB-704A-4FB8-90BF-8B98DD9F3210}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{52B20422-474D-5734-629F-99A1F7DE9787}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,8 @@ Global
 		{737A4BAB-704A-4FB8-90BF-8B98DD9F3210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{737A4BAB-704A-4FB8-90BF-8B98DD9F3210}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{737A4BAB-704A-4FB8-90BF-8B98DD9F3210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52B20422-474D-5734-629F-99A1F7DE9787}.Debug|Any CPU.ActiveCfg = Debug
+		{52B20422-474D-5734-629F-99A1F7DE9787}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
