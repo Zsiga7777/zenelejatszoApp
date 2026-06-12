@@ -39,6 +39,13 @@ public class MusicService(AppDBContext dBContext) : IMusicService
 
     public async Task<List<MusicModel>> GetAllMusicAsync()
     {
+        await dBContext.Database.EnsureCreatedAsync();
         return await dBContext.Musics.AsNoTracking().Select(x =>new MusicModel(x)).ToListAsync();
+    }
+
+    public async Task RemoveAllAsync()
+    {
+        dBContext.Musics.RemoveRange((await dBContext.Musics.ToListAsync()));
+        await dBContext.SaveChangesAsync();
     }
 }

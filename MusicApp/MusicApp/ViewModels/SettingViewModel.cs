@@ -1,17 +1,13 @@
 ﻿namespace MusicApp.ViewModels;
 
 [ObservableObject]
-public partial class SettingViewModel(IFileService fileService, IServiceProvider serviceProvider)
+public partial class SettingViewModel(IFileService fileService, IMusicService musicService, IServiceProvider serviceProvider)
 {
     public IAsyncRelayCommand AppearingCommand => new AsyncRelayCommand(OnAppearingAsync);
 
-    public IRelayCommand DeleteFolderFromListCommand => new RelayCommand<string>((folderName) => OnDeleteFolderFromList(folderName));
-
-    public IRelayCommand DeleteSaveFolderCommand => new RelayCommand(OnDeleteSaveFolder);
+    public IAsyncRelayCommand DeleteFolderFromListCommand => new AsyncRelayCommand<string>((folderName) => OnDeleteFolderFromListAsync(folderName));
 
     public IAsyncRelayCommand AddFolderToListCommand => new AsyncRelayCommand(OnAddFolderToListAsync);
-
-    public IAsyncRelayCommand AddSaveFolderCommand => new AsyncRelayCommand(OnAddSaveFolderAsync);
 
     public IAsyncRelayCommand AppThemePickerTappedCommand => new AsyncRelayCommand(AppThemePickerTappedAsync);
 
@@ -20,13 +16,7 @@ public partial class SettingViewModel(IFileService fileService, IServiceProvider
     public ObservableCollection<FolderModel> folders = new ObservableCollection<FolderModel>();
 
     [ObservableProperty]
-    private FolderModel saveFolder;
-
-    [ObservableProperty]
     private bool isAddFolderButtonVisible = false;
-
-    [ObservableProperty]
-    private bool isSaveFolderVisible = false;
 
     [ObservableProperty]
     private string selectedAppTheme;
@@ -38,24 +28,32 @@ public partial class SettingViewModel(IFileService fileService, IServiceProvider
         if (Folders.Count == 0)
         {
             LoadFolders();
-            LoadSaveFolder();
         }
     }
 
-    private void OnDeleteFolderFromList(string folderName)
+    private async Task OnDeleteFolderFromListAsync(string folderName)
     {
         Folders.Remove(Folders.First(x => x.FolderName == folderName));
         List<string> folderPaths = Folders.Select(x => x.FolderPath).ToList();
         fileService.WriteAllFilePathtoPreference(folderPaths);
+        await DeleteSongsInDeletedFolderAsync();
     }
 
-    private void OnDeleteSaveFolder()
+    private async Task DeleteSongsInDeletedFolderAsync()
     {
-        SaveFolder = null;
-        Preferences.Remove("outputDirectory");
-        IsAddFolderButtonVisible = true;
-        IsSaveFolderVisible = false;
+
+List<string> directories = fileService.ReadAllFilePathFromPreference();
+        if (directories == null || directories.Count == 0) 
+        {
+            await musicService.RemoveAllAsync(); 
+        }
+        else
+        {
+            List<MusicModel> musics = fileService.ReadAllMusicFromDirectories(directories);
+           await musicService.UpdateMusicsAsync(musics);
+        }
     }
+
     private async Task OnAddFolderToListAsync()
     {
         var result = await FolderPicker.Default.PickAsync();
@@ -64,21 +62,17 @@ public partial class SettingViewModel(IFileService fileService, IServiceProvider
             Folders.Add(new FolderModel(result.Folder.Name, result.Folder.Path));
             List<string> folderPaths = Folders.Select(x => x.FolderPath).ToList();
             fileService.WriteAllFilePathtoPreference(folderPaths);
+            await AddSongsToDbAsync();
         }
     }
 
-    private async Task OnAddSaveFolderAsync()
+    private async Task AddSongsToDbAsync()
     {
-        var result = await FolderPicker.Default.PickAsync();
-        if (result.IsSuccessful)
-        {
-            SaveFolder = new FolderModel(result.Folder.Name, result.Folder.Path);
-            Preferences.Set("outputDirectory", result.Folder.Path);
-            IsAddFolderButtonVisible = false;
-            IsSaveFolderVisible = true;
-        }
-
+        List<string> directories = fileService.ReadAllFilePathFromPreference();
+            List<MusicModel> musics = fileService.ReadAllMusicFromDirectories(directories);
+            await musicService.UpdateMusicsAsync(musics);
     }
+
     private async Task AppThemePickerTappedAsync()
     {
         await Shell.Current.ShowPopupAsync<string>(serviceProvider.GetRequiredService<ThemePickerPopup>());
@@ -110,21 +104,6 @@ public partial class SettingViewModel(IFileService fileService, IServiceProvider
             {
                 Folders.Add(new FolderModel(item.Split("\\").Last().ToString(), item));
             }
-        }
-    }
-
-    private void LoadSaveFolder()
-    {
-        string outputFolderTemp = Preferences.Get("outputDirectory", "");
-        if (outputFolderTemp != "")
-        {
-            SaveFolder = new FolderModel(outputFolderTemp.Split("\\").Last().ToString(), outputFolderTemp);
-            IsSaveFolderVisible = true;
-        }
-        else
-        {
-            IsAddFolderButtonVisible = true;
-            IsSaveFolderVisible = false;
         }
     }
 }

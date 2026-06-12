@@ -166,10 +166,10 @@ public partial class MusicListPlusMediaElementComponent : ContentView
     private void LoadLastMusic()
     {
         string currentSongTitle = Preferences.Get("CurrentSongTitle", "");
-        if (currentSongTitle != "")
+        if (currentSongTitle != "" && Musics.Count > 0)
         {
             IsMediaPlayerVisible = true;
-            SelectedMusic = Musics.First(x => x.Title == currentSongTitle);
+            SelectedMusic = Musics.FirstOrDefault(x => x.Title == currentSongTitle);
             if (!_nextSongs.Contains(SelectedMusic))
             {
                 _nextSongs.Add(SelectedMusic);

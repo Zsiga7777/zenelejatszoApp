@@ -21,6 +21,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <components:MusicListPlusMediaElementComponent Musics="{Binding Musics}" Grid.Row="0"/>
+        <Label Text="{Binding ErrorMessage}" IsVisible="{Binding IsErrorVisible}" FontSize="Title" VerticalOptions="Center" HorizontalOptions="Center"/>
     </Grid>
 
 </ContentPage>

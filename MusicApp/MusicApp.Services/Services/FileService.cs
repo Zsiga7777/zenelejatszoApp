@@ -27,9 +27,16 @@ public class FileService : IFileService
                 }
                 else
                 {
-                    TagLib.File TagFile = TagLib.File.Create(file.FullName);
-                    double duration = TagFile.Properties.Duration.TotalSeconds;
-                    songs.Add(new MusicModel($"{file.FullName}", duration, $"{file.Name.Remove(file.Name.IndexOf('(') == -1 ? file.Name.Length - 4 : file.Name.IndexOf('('))}"));
+                    try
+                    {
+                        TagLib.File TagFile = TagLib.File.Create(file.FullName);
+                        double duration = TagFile.Properties.Duration.TotalSeconds;
+                        songs.Add(new MusicModel($"{file.FullName}", duration, $"{file.Name.Remove(file.Name.IndexOf('(') == -1 ? file.Name.Length - 4 : file.Name.IndexOf('('))}"));
+                    }
+                    catch (Exception ex) 
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
             }
         }
@@ -48,7 +55,10 @@ public class FileService : IFileService
         {
             result += path + ";";
         }
-        result = result.Remove(result.Length-1);
+        if (result.Length > 0)
+        {
+            result = result.Remove(result.Length - 1);
+        }
         Preferences.Set("ListOfFolders", result);
     }
 }

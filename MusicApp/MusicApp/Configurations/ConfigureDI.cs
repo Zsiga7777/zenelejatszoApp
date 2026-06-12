@@ -10,6 +10,7 @@ public static class ConfigureDI
         builder.Services.AddTransient<PlaylistAddPopupViewModel>();
         builder.Services.AddTransient<PlaylistMusicListViewModel>();
         builder.Services.AddTransient<ThemePickerPopupViewModel>();
+        builder.Services.AddTransient<AppShellViewModel>();
 
         builder.Services.AddTransient<MusicListView>();
         builder.Services.AddTransient<SettingView>();
@@ -17,6 +18,7 @@ public static class ConfigureDI
         builder.Services.AddTransient<PlaylistAddPopup>();
         builder.Services.AddTransient<PlaylistMusicListView>();
         builder.Services.AddTransient<ThemePickerPopup>();
+        builder.Services.AddTransient<AppShell>();
 
 #if ANDROID
             builder.Services.AddTransient<IFileService, Platforms.Android.Service.AndroidFileService>();
