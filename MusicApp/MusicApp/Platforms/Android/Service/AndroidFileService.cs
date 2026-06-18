@@ -58,4 +58,9 @@ public class AndroidFileService : IFileService
         result = result.Remove(result.Length - 1);
         Preferences.Set("ListOfFolders", result);
     }
+
+    public Task WriteLogsAsync(string exceptionMessage)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace MusicApp.Services.Services;
+﻿using System.Text;
+
+namespace MusicApp.Services.Services;
 
 public class FileService : IFileService
 {
@@ -60,5 +62,20 @@ public class FileService : IFileService
             result = result.Remove(result.Length - 1);
         }
         Preferences.Set("ListOfFolders", result);
+    }
+
+    public async Task WriteLogsAsync(string exceptionMessage)
+    {
+        string folderPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Music player",
+        "logs");
+        Directory.CreateDirectory(folderPath);
+        string path = Path.Combine(folderPath, $"log_{DateTime.Today:yyyy.MM.dd}.txt");
+
+        using FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None, 128);
+        using StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+
+        await sw.WriteLineAsync(exceptionMessage);
     }
 }
